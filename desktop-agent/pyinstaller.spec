@@ -1,13 +1,14 @@
 # -*- mode: python ; coding: utf-8 -*-
 
 import os
+import sys
 from PyInstaller.utils.hooks import collect_submodules
 
 
 block_cipher = None
 
 
-script_dir = os.path.dirname(__file__)
+script_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
 main_script = os.path.join(script_dir, "main.py")
 
 datas = []
@@ -17,7 +18,7 @@ hiddenimports = []
 hiddenimports += collect_submodules("sounddevice")
 hiddenimports += collect_submodules("faster_whisper")
 hiddenimports += collect_submodules("torch")
-hiddenimports += collect_submodules("pyannote")
+hiddenimports += collect_submodules("jaraco")
 
 
 a = Analysis(
@@ -39,14 +40,22 @@ pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 exe = EXE(
     pyz,
     a.scripts,
-    a.binaries,
-    a.zipfiles,
-    a.datas,
     [],
+    exclude_binaries=True,
     name="desktop-agent",
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
     upx=True,
     console=True,
+)
+
+coll = COLLECT(
+    exe,
+    a.binaries,
+    a.zipfiles,
+    a.datas,
+    strip=False,
+    upx=True,
+    name="desktop-agent",
 )

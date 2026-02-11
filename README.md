@@ -62,6 +62,8 @@ cd desktop-agent
 powershell -ExecutionPolicy Bypass -File build_exe.ps1
 ```
 
+The output is a folder at `desktop-agent/dist/desktop-agent/` containing `desktop-agent.exe`.
+
 Environment variables (`.env`):
 
 - `OPENAI_API_KEY` – your project key (never reuse the sample string)

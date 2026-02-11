@@ -4,6 +4,10 @@ $ErrorActionPreference = "Stop"
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 Set-Location $scriptDir
 
-python -m pyinstaller --clean pyinstaller.spec
+python -m PyInstaller --clean pyinstaller.spec
 
-Write-Host "Built dist\desktop-agent.exe"
+if ($LASTEXITCODE -ne 0) {
+    throw "PyInstaller failed with exit code $LASTEXITCODE"
+}
+
+Write-Host "Built dist\desktop-agent\desktop-agent.exe"

@@ -11,7 +11,6 @@ import sounddevice as sd
 
 import clients
 import config
-import diarization
 import locks
 import questions
 import queueing
@@ -210,13 +209,7 @@ def run_audio_pipeline(audio_path: str) -> None:
             logging.info("Transcript empty; skipping response.")
             return
 
-        diarization_segments = diarization.diarize_audio(audio_path)
-        if diarization_segments:
-            diarization.assign_speakers(transcript_segments, diarization_segments)
-        target_speaker = diarization.pick_target_speaker(diarization_segments)
-        transcript = questions.build_transcript_for_speaker(
-            transcript_segments, target_speaker
-        )
+        transcript = questions.build_transcript_for_speaker(transcript_segments, None)
         question = questions.extract_question(transcript)
         if not question:
             logging.info("No question detected; skipping response.")
@@ -240,8 +233,6 @@ def run_audio_pipeline(audio_path: str) -> None:
                 "model": config.AUDIO_GPT_MODEL,
                 "hotkey": config.AUDIO_HOTKEY,
                 "question": question,
-                "speaker": target_speaker,
-                "diarized": bool(diarization_segments),
                 "latency_ms": int((time.perf_counter() - start) * 1000),
             },
         }
