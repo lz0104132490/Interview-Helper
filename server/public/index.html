@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interview Snapshot Feed</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Interview Snapshot Feed</h1>
+        <p>Leave this page open on your phone to see instant AI feedback.</p>
+      </header>
+
+      <section class="status">
+        <div>
+          Connection: <span id="connection" class="chip chip-warning">Connecting…</span>
+        </div>
+        <div>
+          Last update: <span id="last-update">—</span>
+        </div>
+      </section>
+
+      <section class="qr-card" id="qr-card" hidden>
+        <div class="qr-text">
+          <h2>Open on your phone</h2>
+          <p>
+            Scan the code or visit
+            <a id="primary-url" target="_blank" rel="noopener noreferrer">detecting…</a>
+          </p>
+          <div class="url-pills" id="url-list"></div>
+          <small class="qr-hint">Laptop and phone must share the same Wi‑Fi.</small>
+        </div>
+        <div class="qr-image">
+          <img id="qr-image" alt="QR code for this feed" />
+        </div>
+      </section>
+
+      <section class="content-card">
+        <div class="image-wrapper">
+          <img id="screenshot" alt="Latest screenshot" />
+        </div>
+        <article id="feedback" class="feedback">
+          <p>No feedback yet. Trigger the hotkey to send your first screenshot.</p>
+        </article>
+      </section>
+    </main>
+
+    <audio id="ping" preload="auto">
+      <source src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA=" type="audio/wav" />
+    </audio>
+
+    <script src="/app.js" type="module"></script>
+  </body>
+</html>
+

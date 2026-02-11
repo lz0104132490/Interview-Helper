@@ -1,0 +1,12 @@
+{
+  "Server": {
+    "Pid": 31216,
+    "Title": "Interview Relay - Server",
+    "Started": "2025-12-02T15:27:38.568544"
+  },
+  "Agent": {
+    "Pid": 44944,
+    "Title": "Interview Relay - Agent",
+    "Started": "2025-12-02T15:27:38.583783"
+  }
+}

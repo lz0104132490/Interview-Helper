@@ -1,0 +1,25 @@
+<p><strong>1. Context / Transcription</strong></p>
+<p>The screenshot shows a LeetCode problem page (Chinese) titled:</p>
+<blockquote>
+<ol start="2141">
+<li>同时运行 N 台电脑的最长时间 &gt; (“Maximum Running Time of N Computers”)</li>
+</ol>
+</blockquote>
+<p>Key parts of the statement (summarized from the visible text and standard LeetCode version):</p>
+<ul>
+<li>You have <code>n</code> computers and a list <code>batteries</code>, where <code>batteries[i]</code> is the amount of power (in minutes) that battery <code>i</code> can supply. - At any moment you may connect <strong>at most one</strong> battery to a given computer. - Batteries can be swapped between computers <strong>instantly</strong> and can be used on different computers at different times. - You cannot recharge batteries. - You want all <code>n</code> computers to run <strong>simultaneously</strong> for the maximum possible number of minutes.</li>
+</ul>
+<p>Example 1 shown: <code>n = 2, batteries = [3, 3, 3]</code> (actually standard example is <code>[3,3,3]</code> or <code>[3,3,3,3]</code>; the picture text: <code>n = 2, batteries = [3,3,3]</code>). There are diagrams of two computers and three green batteries being plugged / unplugged over time, illustrating that we can schedule batteries so that both computers run together for 4 minutes.</p>
+<p>On the right is the C++ code template:</p>
+<pre><code class="language-cpp">class Solution {
+ public:
+  long long maxRunTime(int n, vector&lt;int&gt;&amp; batteries) {
+  }
+};
+</code></pre>
+<p><strong>2. Specific question / task</strong></p>
+<p>Implement the function <code>long long maxRunTime(int n, vector&lt;int&gt;&amp; batteries)</code> that returns the <strong>maximum number of minutes</strong> all <code>n</code> computers can run simultaneously, given that you can swap batteries arbitrarily but cannot recharge them.</p>
+<hr>
+<h2>3. Step‑by‑step solution</h2>
+<h3>3.1 Observ</h3>
+
