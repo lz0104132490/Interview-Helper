@@ -39,6 +39,11 @@ type feedbackPayload struct {
 	Meta         map[string]interface{} `json:"meta"`
 }
 
+type controlRequest struct {
+	Action string `json:"action"`
+	Delta  int    `json:"delta"`
+}
+
 type state struct {
 	mu          sync.RWMutex
 	latest      *feedbackPayload
@@ -130,6 +135,7 @@ func main() {
 	r.Post("/api/feedback", handleFeedback(uploadDir, state, broker))
 	r.Get("/api/latest", handleLatest(state))
 	r.Get("/api/stream", handleStream(state, broker))
+	r.Post("/api/control", handleControl(broker))
 	r.Get("/api/info", handleInfo(port))
 	r.Get("/api/qr", handleQR(port))
 
@@ -257,6 +263,45 @@ func handleStream(s *state, b *broker) http.HandlerFunc {
 				}
 				flusher.Flush()
 			}
+		}
+	}
+}
+
+func handleControl(b *broker) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var body controlRequest
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			http.Error(w, "invalid JSON payload", http.StatusBadRequest)
+			return
+		}
+		if body.Action != "scroll" {
+			http.Error(w, "unsupported action", http.StatusBadRequest)
+			return
+		}
+		if body.Delta == 0 {
+			http.Error(w, "delta is required", http.StatusBadRequest)
+			return
+		}
+		if body.Delta > 2000 {
+			body.Delta = 2000
+		}
+		if body.Delta < -2000 {
+			body.Delta = -2000
+		}
+
+		payload := map[string]interface{}{
+			"type":      "control",
+			"action":    body.Action,
+			"delta":     body.Delta,
+			"timestamp": time.Now().UTC().Format(time.RFC3339),
+		}
+		bytes, _ := json.Marshal(payload)
+		b.broadcast(bytes)
+
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusAccepted)
+		if _, err := w.Write(bytes); err != nil {
+			log.Printf("failed to write control response: %v", err)
 		}
 	}
 }

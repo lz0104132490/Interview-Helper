@@ -206,6 +206,10 @@ function connectStream() {
   state.eventSource.onmessage = (event) => {
     try {
       const payload = JSON.parse(event.data);
+      if (payload && payload.type === 'control') {
+        handleControl(payload);
+        return;
+      }
       renderFeedback(payload, true);
     } catch (error) {
       console.error('Failed to parse payload', error);
@@ -218,6 +222,14 @@ function connectStream() {
     state.reconnectDelay = Math.min(state.reconnectDelay * 1.5, 15000);
     scheduleReconnect();
   };
+}
+
+function handleControl(payload) {
+  if (!payload || payload.action !== 'scroll') return;
+  const delta = Number(payload.delta);
+  if (!Number.isFinite(delta) || delta === 0) return;
+  const clamped = Math.max(-2000, Math.min(2000, delta));
+  window.scrollBy({ top: clamped, behavior: 'smooth' });
 }
 
 window.addEventListener('visibilitychange', () => {

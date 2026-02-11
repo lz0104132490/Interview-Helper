@@ -55,6 +55,13 @@ copy env.sample .env   # fill in OPENAI_API_KEY etc.
 python main.py
 ```
 
+Bundle into a single EXE (Windows):
+
+```powershell
+cd desktop-agent
+powershell -ExecutionPolicy Bypass -File build_exe.ps1
+```
+
 Environment variables (`.env`):
 
 - `OPENAI_API_KEY` – your project key (never reuse the sample string)
@@ -63,6 +70,35 @@ Environment variables (`.env`):
 - `HOTKEY` – any `keyboard`-compatible combo, e.g. `ctrl+alt+space`
 - `PROMPT` – optional custom instruction for the AI critique
 - `PRIMARY_*` / `SECONDARY_*` – override hotkeys/models/prompts per mode (see below)
+- `STREAM_HOTKEY` – toggle loopback streaming on/off (default `alt+w`)
+- `STREAM_WHISPER_MODEL` – defaults to `large-v3`
+- `STREAM_COMPUTE_TYPE` – defaults to `int8_float16`
+- `STREAM_LANGUAGE` – defaults to `zh`
+- `STREAM_SAMPLE_RATE` – defaults to `16000`
+- `STREAM_CHUNK_SECONDS` – defaults to `3`
+- `STREAM_BEAM_SIZE` – defaults to `2`
+- `STREAM_GPT_MODEL` – defaults to `qwen-max` (DashScope)
+- `STREAM_PROMPT` – defaults to audio-style interview response prompt
+- `STREAM_MIN_SECONDS_BETWEEN_ANSWERS` – cooldown between answers (default `8`)
+- `STREAM_SEND_HOTKEY` – send the latest transcript to the LLM (default `alt+e`)
+- `STREAM_MANUAL_ONLY` – if true, only send on hotkey (default `false`)
+- `STREAM_SILENCE_THRESHOLD` – RMS threshold for silence segmentation (default `0.015`)
+- `STREAM_SILENCE_MS` – trailing silence required to cut a segment (default `700`)
+- `STREAM_MIN_SEGMENT_SECONDS` – minimum segment length before cut (default `1.2`)
+- `STREAM_MAX_SEGMENT_SECONDS` – maximum segment length before forced cut (default `8.0`)
+- `STREAM_LOOPBACK_DEVICE_NAME` – optional output device name substring for WASAPI loopback
+- `AUDIO_HOTKEY` – toggle record-then-transcribe (default `alt+q`)
+- `AUDIO_GPT_MODEL` – defaults to `qwen-max` (DashScope)
+- `AUDIO_STT_MODEL` – defaults to `large-v3`
+- `AUDIO_PROMPT` – prompt for non-stream audio Q&A
+- `AUDIO_MAX_SECONDS` – auto-stop recording (default `20`)
+- `AUDIO_QUESTION_MIN_WORDS` – minimum words to treat as a question (default `6`)
+- `CONTROL_SCROLL_HOTKEY` – send scroll command to phone UI (default `ctrl+alt+down`)
+- `CONTROL_SCROLL_DELTA` – scroll pixels; negative scrolls up (default `400`)
+- `CONTROL_SCROLL_UP_HOTKEY` – scroll up hotkey (default `ctrl+alt+up`)
+
+Streaming answers are generated via DashScope; ensure `DASHSCOPE_API_KEY` is set.
+Audio Q&A recording now uses WASAPI loopback via sounddevice; no C++ helper build required.
 
 How it works:
 
